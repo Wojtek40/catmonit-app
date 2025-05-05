@@ -8,12 +8,12 @@
 
     <item
         android:id="@+id/navigation_storage"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/database_24px"
         android:title="@string/title_storage" />
 
     <item
         android:id="@+id/navigation_networking"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/hub_24px"
         android:title="@string/title_networking" />
 
 </menu>
