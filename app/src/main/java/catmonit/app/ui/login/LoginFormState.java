@@ -7,18 +7,22 @@ import androidx.annotation.Nullable;
  */
 class LoginFormState {
     @Nullable
-    private Integer usernameError;
+    private final Integer usernameError;
     @Nullable
-    private Integer passwordError;
-    private boolean isDataValid;
+    private final Integer passwordError;
+    @Nullable
+    private final Integer serverError;
+    private final boolean isDataValid;
 
-    LoginFormState(@Nullable Integer usernameError, @Nullable Integer passwordError) {
+    LoginFormState(@Nullable Integer serverError, @Nullable Integer usernameError, @Nullable Integer passwordError) {
+        this.serverError = serverError;
         this.usernameError = usernameError;
         this.passwordError = passwordError;
         this.isDataValid = false;
     }
 
     LoginFormState(boolean isDataValid) {
+        this.serverError = null;
         this.usernameError = null;
         this.passwordError = null;
         this.isDataValid = isDataValid;
@@ -37,4 +41,10 @@ class LoginFormState {
     boolean isDataValid() {
         return isDataValid;
     }
+
+    @Nullable
+    public Integer getServerError() {
+        return serverError;
+    }
+
 }
