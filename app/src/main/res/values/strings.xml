@@ -13,13 +13,13 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
 
-    <string name="welcome">"Welcome!"</string>
+    <string name="welcome">"Welcome! %s"</string>
     <string name="invalid_server">Server address may not be empty</string>
     <string name="invalid_username">Username may not be empty</string>
     <string name="invalid_password">Password may not be empty</string>
     <string name="login_failed">"Login failed"</string>
 
-    <string name="storage_space_used">%s of %s space used.</string>
+    <string name="storage_space_used">%s / %s space used</string>
 
     <string name="bandwidth_used">%s bandwidth used</string>
 

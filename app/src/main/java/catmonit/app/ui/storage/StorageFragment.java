@@ -29,8 +29,8 @@ public class StorageFragment extends Fragment {
 
         final TextView textView = binding.textStorageUsed;
         storageViewModel.getStorageState().observe(getViewLifecycleOwner(), storageState -> {
-            String used = Formatter.formatShortFileSize(null, storageState.getUsed_space_bytes());
-            String total = Formatter.formatShortFileSize(null, storageState.getTotal_space_bytes());
+            String used = Formatter.formatShortFileSize(getContext(), storageState.getUsed_space_bytes());
+            String total = Formatter.formatShortFileSize(getContext(), storageState.getTotal_space_bytes());
             textView.setText(getString(R.string.storage_space_used, used, total));
         });
         return root;
