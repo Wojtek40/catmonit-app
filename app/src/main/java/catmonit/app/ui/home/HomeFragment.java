@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import catmonit.app.R;
 import catmonit.app.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -25,7 +26,7 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        homeViewModel.getText().observe(getViewLifecycleOwner(), mText -> textView.setText(getString(R.string.welcome, mText)));
         return root;
     }
 
