@@ -19,10 +19,11 @@
     <string name="invalid_password">Password may not be empty</string>
     <string name="login_failed">"Login failed"</string>
 
-    <string name="storage_space_used">%s / %s space used (insert chart here)</string>
+    <string name="storage_space_used">%s / %s used</string>
 
     <string name="bandwidth_used">%s bandwidth used</string>
 
     <string name="label_errors">Errors</string>
     <string name="label_warnings">Warnings</string>
+    <string name="icon">icon</string>
 </resources>

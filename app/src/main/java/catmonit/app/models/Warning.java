@@ -1,27 +1,51 @@
 package catmonit.app.models;
 
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
+import androidx.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+
 public class Warning {
-    protected String text;
+    @Severity
+    protected int severity;
     protected String deviceId;
+    protected String text;
+    protected String deviceName;
+    protected String ipAddress;
 
-    public Warning(String text, String device_id) {
+    public Warning(int severity, String deviceId, String text, String deviceName, String ipAddress) {
+        this.severity = severity;
+        this.deviceId = deviceId;
         this.text = text;
-        this.deviceId = device_id;
+        this.deviceName = deviceName;
+        this.ipAddress = ipAddress;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    public int getSeverity() {
+        return severity;
     }
 
     public String getDeviceId() {
         return deviceId;
     }
 
-    public void setDeviceId(String device_id) {
-        this.deviceId = device_id;
+    public String getText() {
+        return text;
     }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    @Retention(SOURCE)
+    @IntDef({WARNING, ERROR})
+    public @interface Severity {}
+    public static final int WARNING = 0;
+    public static final int ERROR = 1;
+
 }

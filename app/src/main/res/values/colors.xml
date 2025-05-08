@@ -9,10 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange">#FF9800</color>
     <color name="red">#FFFF0000</color>
-    <color name="dark_blue">#090759</color>
-    <color name="light_blue">#FF40B3FF</color>
+    <color name="dark_blue">#FF090759</color>
+    <color name="light_blue">#FF88CEFC</color>
     <color name="saffron">#FFE3B505</color>
     <color name="jasper">#FFDB504A</color>
     <color name="midnight_green">#FF084C61</color>
     <color name="vanilla">#FFE4D6A7</color>
+    <color name="gray">#FF808080</color>
 </resources>

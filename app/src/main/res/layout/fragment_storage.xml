@@ -6,16 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.storage.StorageFragment">
 
-    <TextView
-        android:id="@+id/text_storage_used"
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart_storage_used"
+        android:maxWidth="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="0dp"
+
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/number_errors"
@@ -25,7 +27,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/number_warnings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_storage_used"
+        app:layout_constraintTop_toBottomOf="@id/chart_storage_used"
         android:padding="36dp"
         android:background="@drawable/rounded_card"
         android:backgroundTint="@color/jasper">
@@ -48,7 +50,6 @@
             app:layout_constraintTop_toBottomOf="@id/label_errors"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="1"
             android:textStyle="bold"
             android:textSize="40sp"
             app:layout_constraintDimensionRatio="1:1"
@@ -65,7 +66,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/number_errors"
-        app:layout_constraintTop_toBottomOf="@id/text_storage_used"
+        app:layout_constraintTop_toBottomOf="@id/chart_storage_used"
         android:padding="32dp"
         android:background="@drawable/rounded_card"
         android:backgroundTint="@color/saffron"
@@ -92,7 +93,6 @@
             app:layout_constraintTop_toBottomOf="@id/label_warnings"
             android:textSize="40sp"
             android:textStyle="bold"
-            android:text="0"
             android:textColor="@color/black"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
