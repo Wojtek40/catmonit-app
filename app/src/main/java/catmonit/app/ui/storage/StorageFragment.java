@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 
 import catmonit.app.R;
 import catmonit.app.databinding.FragmentStorageBinding;
+import catmonit.app.models.Warning;
+import catmonit.app.models.WarningAdapter;
 
 
 public class StorageFragment extends Fragment {
@@ -48,6 +52,15 @@ public class StorageFragment extends Fragment {
         drawChart(storageState.getUsed_space_bytes(), storageState.getTotal_space_bytes());
         binding.numberErrorsText.setText(String.valueOf(storageState.getErrors().length));
         binding.numberWarningsText.setText(String.valueOf(storageState.getWarnings().length));
+
+        updateMonitView(storageState.getErrors(), binding.errorsRecyclerView);
+        updateMonitView(storageState.getWarnings(), binding.warningRecyclerView);
+    }
+
+    private void updateMonitView(Warning[] warnings, RecyclerView recyclerView){
+        WarningAdapter warningAdapter = new WarningAdapter(warnings);
+        recyclerView.setAdapter(warningAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void drawChart(long used, long total){
