@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import catmonit.app.R;
 import catmonit.app.databinding.FragmentStorageBinding;
+import catmonit.app.models.DeviceInfoAdapter;
 import catmonit.app.models.Warning;
 import catmonit.app.models.WarningAdapter;
 
@@ -55,6 +56,10 @@ public class StorageFragment extends Fragment {
 
         updateMonitView(storageState.getErrors(), binding.errorsRecyclerView);
         updateMonitView(storageState.getWarnings(), binding.warningRecyclerView);
+
+        DeviceInfoAdapter deviceInfoAdapter = new DeviceInfoAdapter(storageState.getDeviceInfo());
+        binding.devicesRecyclerView.setAdapter(deviceInfoAdapter);
+        binding.devicesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     private void updateMonitView(Warning[] warnings, RecyclerView recyclerView){

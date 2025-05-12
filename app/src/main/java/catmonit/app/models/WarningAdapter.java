@@ -1,5 +1,9 @@
 package catmonit.app.models;
 
+import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +16,7 @@ import catmonit.app.R;
 
 
 public class WarningAdapter extends RecyclerView.Adapter<WarningAdapter.WarningHolder> {
-    private Warning[] dataSet;
+    private final Warning[] dataSet;
 
     public WarningAdapter(Warning[] dataSet){
         this.dataSet = dataSet;
@@ -29,7 +33,12 @@ public class WarningAdapter extends RecyclerView.Adapter<WarningAdapter.WarningH
     @Override
     public void onBindViewHolder(@NonNull WarningHolder holder, int position) {
         holder.getDescription().setText(dataSet[position].getText());
-        holder.getTitle().setText(String.valueOf(dataSet[position].getIpAddress()));
+        SpannableStringBuilder sb = new SpannableStringBuilder()
+                .append(dataSet[position].getDeviceName(), new StyleSpan(Typeface.BOLD), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                .append(" (")
+                .append(dataSet[position].getIpAddress())
+                .append(")");
+        holder.getTitle().setText(sb);
     }
 
     @Override
