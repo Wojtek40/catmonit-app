@@ -1,5 +1,7 @@
 package catmonit.app.models;
 
+import android.content.Context;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +32,11 @@ public class DiscInfoAdapter extends RecyclerView.Adapter<DiscInfoAdapter.DiscIn
     @Override
     public void onBindViewHolder(@NonNull DiscInfoHolder holder, int position) {
         DiscInfo di = dataSet[position];
-        holder.discLabel.setText(di.label);
-        holder.textUsed.setText(String.format("space is used"));
+        Context context = holder.itemView.getContext();
+        holder.discLabel.setText(String.format("%s - %s / %s used",
+                di.label,
+                Formatter.formatShortFileSize(context, di.usedBytes),
+                Formatter.formatShortFileSize(context, di.totalBytes)));
         holder.getProgressUsed().setProgress((int) ((float) di.usedBytes / (float) di.totalBytes * 100));
     }
 
@@ -41,19 +46,14 @@ public class DiscInfoAdapter extends RecyclerView.Adapter<DiscInfoAdapter.DiscIn
     }
 
     public static class DiscInfoHolder extends RecyclerView.ViewHolder {
-        private final TextView textUsed;
         private final LinearProgressIndicator progressUsed;
         private final TextView discLabel;
         public DiscInfoHolder(@NonNull View itemView) {
             super(itemView);
-            textUsed = itemView.findViewById(R.id.text_used);
             progressUsed = itemView.findViewById(R.id.used_progress);
             discLabel = itemView.findViewById(R.id.disc_label);
         }
 
-        public TextView getTextUsed() {
-            return textUsed;
-        }
 
         public LinearProgressIndicator getProgressUsed() {
             return progressUsed;

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,18 +18,21 @@ import catmonit.app.R;
 
 public class WarningAdapter extends RecyclerView.Adapter<WarningAdapter.WarningHolder> {
     private final Warning[] dataSet;
+    private final @LayoutRes int layout;
 
-    public WarningAdapter(Warning[] dataSet){
+    public WarningAdapter(Warning[] dataSet, @LayoutRes int layout){
         this.dataSet = dataSet;
+        this.layout = layout;
     }
 
     @NonNull
     @Override
     public WarningHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.warning_display, parent, false);
+                .inflate(layout, parent, false);
         return new WarningHolder(v);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull WarningHolder holder, int position) {

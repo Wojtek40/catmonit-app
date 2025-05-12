@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,16 +55,16 @@ public class StorageFragment extends Fragment {
         binding.numberErrorsText.setText(String.valueOf(storageState.getErrors().length));
         binding.numberWarningsText.setText(String.valueOf(storageState.getWarnings().length));
 
-        updateMonitView(storageState.getErrors(), binding.errorsRecyclerView);
-        updateMonitView(storageState.getWarnings(), binding.warningRecyclerView);
+        updateMonitView(storageState.getErrors(), binding.errorsRecyclerView, R.layout.error_display);
+        updateMonitView(storageState.getWarnings(), binding.warningRecyclerView, R.layout.warning_display);
 
         DeviceInfoAdapter deviceInfoAdapter = new DeviceInfoAdapter(storageState.getDeviceInfo());
         binding.devicesRecyclerView.setAdapter(deviceInfoAdapter);
         binding.devicesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void updateMonitView(Warning[] warnings, RecyclerView recyclerView){
-        WarningAdapter warningAdapter = new WarningAdapter(warnings);
+    private void updateMonitView(Warning[] warnings, RecyclerView recyclerView, @LayoutRes int layout){
+        WarningAdapter warningAdapter = new WarningAdapter(warnings, layout);
         recyclerView.setAdapter(warningAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
