@@ -1,8 +1,6 @@
 package catmonit.app.ui.storage;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-
-import java.util.ArrayList;
 
 import catmonit.app.R;
 import catmonit.app.databinding.FragmentStorageBinding;
@@ -51,7 +41,6 @@ public class StorageFragment extends Fragment {
         binding = null;
     }
     private void updateDisplay(StorageState storageState){
-        drawChart(storageState.getUsed_space_bytes(), storageState.getTotal_space_bytes());
         binding.numberErrorsText.setText(String.valueOf(storageState.getErrors().length));
         binding.numberWarningsText.setText(String.valueOf(storageState.getWarnings().length));
 
@@ -67,44 +56,5 @@ public class StorageFragment extends Fragment {
         WarningAdapter warningAdapter = new WarningAdapter(warnings, layout);
         recyclerView.setAdapter(warningAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    private void drawChart(long used, long total){
-        long available = total - used;
-
-        ArrayList<PieEntry> data = new ArrayList<>();
-        data.add(new PieEntry(used, "Used"));
-        data.add(new PieEntry(available, "Free"));
-
-        PieDataSet dataSet = new PieDataSet(data, "");
-        dataSet.setColors(requireContext().getColor(R.color.midnight_green), requireContext().getColor(R.color.vanilla));
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.WHITE);
-        colors.add(Color.BLACK);
-
-        dataSet.setValueTextColors(colors);
-
-        PieData pieData = new PieData(dataSet);
-        pieData.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                return Formatter.formatShortFileSize(getContext(), (long) value);
-            }
-        });
-        pieData.setValueTextSize(14f);
-
-        String usedText = Formatter.formatShortFileSize(getContext(), used);
-        String totalText = Formatter.formatShortFileSize(getContext(), total);
-
-        PieChart chart = binding.chartStorageUsed;
-
-        chart.getLegend().setTextColor(requireContext().getColor(R.color.gray));
-        chart.setDrawEntryLabels(false);
-        chart.setCenterText(getString(R.string.storage_space_used, usedText, totalText));
-        chart.setDrawCenterText(true);
-        chart.getDescription().setEnabled(false);
-
-        chart.setData(pieData);
-        chart.invalidate();
     }
 }

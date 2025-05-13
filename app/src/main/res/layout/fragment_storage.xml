@@ -7,24 +7,12 @@
     tools:context=".ui.storage.StorageFragment"
     android:clipToPadding="false"
     android:paddingBottom="100dp"
+    android:paddingTop="50dp"
 >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/chart_storage_used"
-            android:maxWidth="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/number_errors"
@@ -34,7 +22,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toStartOf="@+id/number_warnings"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chart_storage_used"
+            app:layout_constraintTop_toTopOf="parent"
             android:padding="36dp"
             android:background="@drawable/rounded_card"
             android:backgroundTint="@color/jasper">
@@ -73,7 +61,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/number_errors"
-            app:layout_constraintTop_toBottomOf="@id/chart_storage_used"
+            app:layout_constraintTop_toTopOf="parent"
             android:padding="32dp"
             android:background="@drawable/rounded_card"
             android:backgroundTint="@color/saffron"
