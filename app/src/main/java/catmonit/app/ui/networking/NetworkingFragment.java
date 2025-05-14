@@ -4,17 +4,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.ArrayList;
+
+import catmonit.app.R;
 import catmonit.app.databinding.FragmentNetworkingBinding;
 
 public class NetworkingFragment extends Fragment {
 
     private FragmentNetworkingBinding binding;
+    private LineData networkThroughputData;
+    private LineDataSet networkThroughputDataSet;
+    private int entryIndex;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -24,9 +35,45 @@ public class NetworkingFragment extends Fragment {
         binding = FragmentNetworkingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.bandwidthUsedText;
-        networkingViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        setupChart();
+
+        networkingViewModel.getCurrentNetworkThroughput().observe(getViewLifecycleOwner(), this::addNetworkThroughput);
         return root;
+    }
+
+    private void setupChart() {
+        networkThroughputDataSet = new LineDataSet(new ArrayList<>(), getString(catmonit.app.R.string.networkThroughput));
+        networkThroughputDataSet.setLineWidth(2f);
+        networkThroughputDataSet.setColor(requireContext().getColor(android.R.color.holo_blue_light));
+        networkThroughputDataSet.setDrawCircles(false);
+        networkThroughputDataSet.setDrawValues(false);
+
+        networkThroughputData = new LineData(networkThroughputDataSet);
+        binding.networkThroughput.setData(networkThroughputData);
+        binding.networkThroughput.getDescription().setEnabled(false);
+        binding.networkThroughput.getAxisRight().setEnabled(false);
+
+        XAxis xAxis = binding.networkThroughput.getXAxis();
+        xAxis.setDrawLabels(false);
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis leftAxis = binding.networkThroughput.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setTextColor(requireContext().getColor(R.color.gray));
+
+        binding.networkThroughput.setTouchEnabled(false);
+        binding.networkThroughput.setScaleEnabled(false);
+        binding.networkThroughput.getLegend().setTextColor(requireContext().getColor(R.color.gray));
+    }
+
+
+    private void addNetworkThroughput(Long networkThroughput){
+        networkThroughputDataSet.addEntry(new Entry(entryIndex++, networkThroughput));
+        networkThroughputData.notifyDataChanged();
+        binding.networkThroughput.notifyDataSetChanged();
+        binding.networkThroughput.setVisibleXRangeMaximum(150);
+        binding.networkThroughput.moveViewToX(entryIndex);
     }
 
     @Override

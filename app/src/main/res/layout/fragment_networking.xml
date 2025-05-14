@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.networking.NetworkingFragment">
+    tools:context=".ui.networking.NetworkingFragment"
+    android:paddingTop="50dp"
+>
 
     <TextView
         android:id="@+id/bandwidth_used_text"
@@ -14,5 +16,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        />
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/network_throughput"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintTop_toBottomOf="@id/bandwidth_used_text"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/network_throughput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"
+        android:text="@string/next_guys"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
