@@ -16,6 +16,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import catmonit.app.R;
 import catmonit.app.databinding.FragmentNetworkingBinding;
@@ -35,14 +36,19 @@ public class NetworkingFragment extends Fragment {
         binding = FragmentNetworkingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        setupChart();
 
+        setupChart(networkingViewModel.getEntries());
         networkingViewModel.getCurrentNetworkThroughput().observe(getViewLifecycleOwner(), this::addNetworkThroughput);
         return root;
     }
 
-    private void setupChart() {
-        networkThroughputDataSet = new LineDataSet(new ArrayList<>(), getString(catmonit.app.R.string.networkThroughput));
+    private void setupChart(List<Long> entries) {
+        ArrayList<Entry> parsed = new ArrayList<>();
+        for (int i = 0; i < entries.size(); i++) {
+            parsed.add(new Entry(i, entries.get(i)));
+        }
+        networkThroughputDataSet = new LineDataSet(parsed, getString(catmonit.app.R.string.networkThroughput));
+        entryIndex = parsed.size();
         networkThroughputDataSet.setLineWidth(2f);
         networkThroughputDataSet.setColor(requireContext().getColor(android.R.color.holo_blue_light));
         networkThroughputDataSet.setDrawCircles(false);
@@ -65,6 +71,7 @@ public class NetworkingFragment extends Fragment {
         binding.networkThroughput.setTouchEnabled(false);
         binding.networkThroughput.setScaleEnabled(false);
         binding.networkThroughput.getLegend().setTextColor(requireContext().getColor(R.color.gray));
+        binding.networkThroughput.moveViewToX(entryIndex);
     }
 
 
