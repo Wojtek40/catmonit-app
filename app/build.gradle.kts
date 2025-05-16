@@ -49,10 +49,11 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.mpandroidchart)
     implementation(libs.okhttp)
+    implementation(libs.gson)
+    implementation(libs.retrofit)
     // Retrofit for network requests
 //    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
 //    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-
     // JWT decoding library
     implementation (libs.java.jwt)
 }

@@ -4,7 +4,7 @@ import catmonit.app.models.Warning;
 
 public class APIConnector {
     private static APIConnector apiConnector;
-    private String apiUrl;
+    private final String apiUrl;
 
     public APIConnector(String url) {
         this.apiUrl = url;
