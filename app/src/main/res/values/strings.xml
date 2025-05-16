@@ -13,7 +13,7 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
 
-    <string name="welcome">"Welcome, %s!"</string>
+    <string name="welcome">"Welcome home, %s!"</string>
     <string name="invalid_server">Server address may not be empty</string>
     <string name="invalid_username">Username may not be empty</string>
     <string name="invalid_password">Password may not be empty</string>
@@ -28,6 +28,7 @@
     <string name="icon">icon</string>
     <string name="error_icon">Error icon</string>
     <string name="warning_icon">Warning icon</string>
-    <string name="next_guys">This is a problem for the next guys :)</string>
+    <string name="next_guys">The rest is left as an exercise for the next guys</string>
     <string name="networkThroughput">Network throughput (units)</string>
+    <string name="search_for_devices">Search for devices</string>
 </resources>

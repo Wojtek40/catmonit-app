@@ -6,6 +6,8 @@ import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,14 +21,18 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import catmonit.app.R;
 
-public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.DeviceInfoHolder> {
-    private final DeviceInfo[] deviceInfo;
+public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.DeviceInfoHolder> implements Filterable {
+    private final ArrayList<DeviceInfo> filteredDeviceInfo;
+    private final DeviceInfo[] allDeviceInfo;
 
     public DeviceInfoAdapter(DeviceInfo[] deviceInfo) {
-        this.deviceInfo = deviceInfo;
+        this.filteredDeviceInfo = new ArrayList<>(Arrays.asList(deviceInfo));
+        this.allDeviceInfo = deviceInfo;
     }
 
 
@@ -40,7 +46,7 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.De
 
     @Override
     public void onBindViewHolder(@NonNull DeviceInfoHolder holder, int position) {
-        DeviceInfo di = deviceInfo[position];
+        DeviceInfo di = filteredDeviceInfo.get(position);
         String usedText = Formatter.formatShortFileSize(holder.itemView.getContext(), di.getUsedSpace());
         String totalText = Formatter.formatShortFileSize(holder.itemView.getContext(), di.getTotalSpace());
 
@@ -56,7 +62,7 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.De
 
     @Override
     public int getItemCount() {
-        return deviceInfo.length;
+        return filteredDeviceInfo.size();
     }
     private void drawChart(long used, long total, Context context, PieChart chart){
         long available = total - used;
@@ -95,6 +101,39 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.De
         chart.setData(pieData);
         chart.invalidate();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    private final Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<DeviceInfo> filtered = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0){
+                filtered.addAll(Arrays.asList(allDeviceInfo));
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (DeviceInfo deviceInfo : allDeviceInfo) {
+                    if (deviceInfo.deviceName.toLowerCase().contains(filterPattern) ||
+                            deviceInfo.ipAddress.toLowerCase().contains(filterPattern)) {
+                        filtered.add(deviceInfo);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filtered;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            filteredDeviceInfo.clear();
+            filteredDeviceInfo.addAll((List<DeviceInfo>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class DeviceInfoHolder extends RecyclerView.ViewHolder {
         TextView deviceName;

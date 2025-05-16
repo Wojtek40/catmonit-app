@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class StorageFragment extends Fragment {
         View root = binding.getRoot();
 
         storageViewModel.getStorageState().observe(getViewLifecycleOwner(), this::updateDisplay);
+
         return root;
     }
 
@@ -50,6 +52,19 @@ public class StorageFragment extends Fragment {
         DeviceInfoAdapter deviceInfoAdapter = new DeviceInfoAdapter(storageState.getDeviceInfo());
         binding.devicesRecyclerView.setAdapter(deviceInfoAdapter);
         binding.devicesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        binding.deviceSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                deviceInfoAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
     }
 
     private void updateMonitView(Warning[] warnings, RecyclerView recyclerView, @LayoutRes int layout){
