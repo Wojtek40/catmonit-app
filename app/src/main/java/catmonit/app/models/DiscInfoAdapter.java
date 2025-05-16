@@ -48,6 +48,7 @@ public class DiscInfoAdapter extends RecyclerView.Adapter<DiscInfoAdapter.DiscIn
     public static class DiscInfoHolder extends RecyclerView.ViewHolder {
         private final LinearProgressIndicator progressUsed;
         private final TextView discLabel;
+
         public DiscInfoHolder(@NonNull View itemView) {
             super(itemView);
             progressUsed = itemView.findViewById(R.id.used_progress);

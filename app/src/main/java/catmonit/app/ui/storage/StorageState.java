@@ -7,6 +7,7 @@ public class StorageState {
     private final Warning[] warnings;
     private final Warning[] errors;
     private final DeviceInfo[] deviceInfo;
+
     public StorageState(Warning[] warnings, Warning[] errors, DeviceInfo[] deviceInfo) {
         this.warnings = warnings;
         this.errors = errors;

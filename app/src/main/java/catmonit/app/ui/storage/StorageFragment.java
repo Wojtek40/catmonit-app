@@ -42,7 +42,8 @@ public class StorageFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-    private void updateDisplay(StorageState storageState){
+
+    private void updateDisplay(StorageState storageState) {
         binding.numberErrorsText.setText(String.valueOf(storageState.getErrors().length));
         binding.numberWarningsText.setText(String.valueOf(storageState.getWarnings().length));
 
@@ -67,7 +68,7 @@ public class StorageFragment extends Fragment {
         });
     }
 
-    private void updateMonitView(Warning[] warnings, RecyclerView recyclerView, @LayoutRes int layout){
+    private void updateMonitView(Warning[] warnings, RecyclerView recyclerView, @LayoutRes int layout) {
         WarningAdapter warningAdapter = new WarningAdapter(warnings, layout);
         recyclerView.setAdapter(warningAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

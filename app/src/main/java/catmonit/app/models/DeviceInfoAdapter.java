@@ -29,12 +29,39 @@ import catmonit.app.R;
 public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.DeviceInfoHolder> implements Filterable {
     private final ArrayList<DeviceInfo> filteredDeviceInfo;
     private final DeviceInfo[] allDeviceInfo;
+    private final Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<DeviceInfo> filtered = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filtered.addAll(Arrays.asList(allDeviceInfo));
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (DeviceInfo deviceInfo : allDeviceInfo) {
+                    if (deviceInfo.deviceName.toLowerCase().contains(filterPattern) ||
+                            deviceInfo.ipAddress.toLowerCase().contains(filterPattern)) {
+                        filtered.add(deviceInfo);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filtered;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            filteredDeviceInfo.clear();
+            filteredDeviceInfo.addAll((List<DeviceInfo>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
 
     public DeviceInfoAdapter(DeviceInfo[] deviceInfo) {
         this.filteredDeviceInfo = new ArrayList<>(Arrays.asList(deviceInfo));
         this.allDeviceInfo = deviceInfo;
     }
-
 
     @NonNull
     @Override
@@ -64,7 +91,8 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.De
     public int getItemCount() {
         return filteredDeviceInfo.size();
     }
-    private void drawChart(long used, long total, Context context, PieChart chart){
+
+    private void drawChart(long used, long total, Context context, PieChart chart) {
         long available = total - used;
 
         ArrayList<PieEntry> data = new ArrayList<>();
@@ -106,34 +134,6 @@ public class DeviceInfoAdapter extends RecyclerView.Adapter<DeviceInfoAdapter.De
     public Filter getFilter() {
         return filter;
     }
-
-    private final Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<DeviceInfo> filtered = new ArrayList<>();
-            if (constraint == null || constraint.length() == 0){
-                filtered.addAll(Arrays.asList(allDeviceInfo));
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-                for (DeviceInfo deviceInfo : allDeviceInfo) {
-                    if (deviceInfo.deviceName.toLowerCase().contains(filterPattern) ||
-                            deviceInfo.ipAddress.toLowerCase().contains(filterPattern)) {
-                        filtered.add(deviceInfo);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filtered;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            filteredDeviceInfo.clear();
-            filteredDeviceInfo.addAll((List<DeviceInfo>) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
 
     public static class DeviceInfoHolder extends RecyclerView.ViewHolder {
         TextView deviceName;

@@ -7,6 +7,8 @@ import androidx.annotation.IntDef;
 import java.lang.annotation.Retention;
 
 public class Warning {
+    public static final int WARNING = 0;
+    public static final int ERROR = 1;
     @Severity
     protected int severity;
     protected String deviceId;
@@ -41,11 +43,9 @@ public class Warning {
     public String getIpAddress() {
         return ipAddress;
     }
-
     @Retention(SOURCE)
     @IntDef({WARNING, ERROR})
-    public @interface Severity {}
-    public static final int WARNING = 0;
-    public static final int ERROR = 1;
+    public @interface Severity {
+    }
 
 }

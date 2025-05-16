@@ -20,13 +20,13 @@ public class WebSocketManager extends WebSocketListener {
     }
 
     @Override
-    public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
-        super.onMessage(webSocket, text);
-    }
-
-    @Override
     public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
         super.onFailure(webSocket, t, response);
         Log.println(Log.ERROR, "", t.getMessage());
+    }
+
+    @Override
+    public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
+        super.onMessage(webSocket, text);
     }
 }

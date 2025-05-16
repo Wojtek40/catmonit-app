@@ -13,7 +13,7 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel() {
         mText = new MutableLiveData<>();
         LoginRepository lr = LoginRepository.getInstance();
-        if (lr != null){
+        if (lr != null) {
             mText.setValue(lr.getLoggedInUser().getDisplayName());
         }
     }

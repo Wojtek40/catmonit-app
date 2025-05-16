@@ -1,8 +1,8 @@
 package catmonit.app.data;
 
-import catmonit.app.data.model.LoggedInUser;
-
 import java.io.IOException;
+
+import catmonit.app.data.model.LoggedInUser;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.

@@ -11,13 +11,12 @@ import catmonit.app.data.model.LoggedInUser;
  */
 public class LoginRepository {
 
-    private static volatile LoginRepository instance;
-
     private static final String ACCESS_TOKEN_NAME = "access_token";
     private static final String PREFS_NAME = "auth_prefs";
     private static final String SERVER_NAME = "server_name";
     private static final String USERID = "userid";
     private static final String DISPLAY_NAME = "display_name";
+    private static volatile LoginRepository instance;
     private final LoginDataSource dataSource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -35,7 +34,23 @@ public class LoginRepository {
         }
         return instance;
     }
-    public static LoginRepository getInstance(){
+
+    public static LoginRepository getInstance() {
+        return instance;
+    }
+
+    public static LoginRepository getInstance(Context context) {
+        if (instance != null) {
+            return instance;
+        }
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String accessToken = prefs.getString(ACCESS_TOKEN_NAME, null);
+        LoginRepository lr = new LoginRepository(new LoginDataSource());
+        if (accessToken == null) {
+            return lr;
+        }
+        lr.user = new LoggedInUser(prefs.getString(USERID, null), prefs.getString(DISPLAY_NAME, null), accessToken, prefs.getString(SERVER_NAME, null));
+        instance = lr;
         return instance;
     }
 
@@ -49,14 +64,14 @@ public class LoginRepository {
         dataSource.logout();
     }
 
+    public LoggedInUser getLoggedInUser() {
+        return user;
+    }
+
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
-    }
-
-    public LoggedInUser getLoggedInUser(){
-        return user;
     }
 
     public Result<LoggedInUser> login(String username, String password, String server) {
@@ -69,7 +84,7 @@ public class LoginRepository {
     }
 
     public void saveUserToSharedPrefereces(Context context) {
-        if (user == null){
+        if (user == null) {
             return;
         }
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
@@ -78,19 +93,5 @@ public class LoginRepository {
                 .putString(USERID, user.getUserId())
                 .putString(SERVER_NAME, user.getServer())
                 .apply();
-    }
-    public static LoginRepository getInstance(Context context){
-        if (instance != null) {
-            return instance;
-        }
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String accessToken = prefs.getString(ACCESS_TOKEN_NAME, null);
-        LoginRepository lr = new LoginRepository(new LoginDataSource());
-        if (accessToken == null) {
-            return lr;
-        }
-        lr.user = new LoggedInUser(prefs.getString(USERID, null), prefs.getString(DISPLAY_NAME, null), accessToken, prefs.getString(SERVER_NAME, null));
-        instance = lr;
-        return instance;
     }
 }

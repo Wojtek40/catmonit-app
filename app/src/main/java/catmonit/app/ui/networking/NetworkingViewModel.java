@@ -16,11 +16,12 @@ public class NetworkingViewModel extends ViewModel {
     private final Random random = new Random();
     private final List<Long> entries;
 
-    public NetworkingViewModel(){
+    public NetworkingViewModel() {
         currentNetworkThroughput = new MutableLiveData<>();
         entries = new ArrayList<>();
         startMockingBandwidth();
     }
+
     public void startMockingBandwidth() {
         mockHandler.postDelayed(new Runnable() {
             @Override

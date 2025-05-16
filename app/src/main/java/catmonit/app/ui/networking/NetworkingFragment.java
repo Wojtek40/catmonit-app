@@ -75,7 +75,7 @@ public class NetworkingFragment extends Fragment {
     }
 
 
-    private void addNetworkThroughput(Long networkThroughput){
+    private void addNetworkThroughput(Long networkThroughput) {
         networkThroughputDataSet.addEntry(new Entry(entryIndex++, networkThroughput));
         networkThroughputData.notifyDataChanged();
         binding.networkThroughput.notifyDataSetChanged();

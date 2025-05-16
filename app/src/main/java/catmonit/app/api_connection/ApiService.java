@@ -10,7 +10,7 @@ import retrofit2.http.POST;
 public interface ApiService {
     @POST("api/Login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
-    
+
     @GET("api/Login/userCheck")
     Call<?> userCheck();
 }

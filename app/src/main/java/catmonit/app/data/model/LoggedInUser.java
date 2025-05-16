@@ -24,9 +24,11 @@ public class LoggedInUser {
     public String getDisplayName() {
         return displayName;
     }
-    public String getJWT(){
+
+    public String getJWT() {
         return JWT;
     }
+
     public String getServer() {
         return server;
     }

@@ -20,7 +20,7 @@ public class WarningAdapter extends RecyclerView.Adapter<WarningAdapter.WarningH
     private final Warning[] dataSet;
     private final @LayoutRes int layout;
 
-    public WarningAdapter(Warning[] dataSet, @LayoutRes int layout){
+    public WarningAdapter(Warning[] dataSet, @LayoutRes int layout) {
         this.dataSet = dataSet;
         this.layout = layout;
     }
@@ -50,11 +50,11 @@ public class WarningAdapter extends RecyclerView.Adapter<WarningAdapter.WarningH
         return dataSet.length;
     }
 
-    public static class WarningHolder extends RecyclerView.ViewHolder{
+    public static class WarningHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView description;
 
-        public WarningHolder(View view)  {
+        public WarningHolder(View view) {
             super(view);
 
             this.title = view.findViewById(R.id.tvTitle);
