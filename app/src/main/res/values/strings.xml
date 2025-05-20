@@ -10,7 +10,7 @@
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
 
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
 
     <string name="welcome">"Welcome home, %s!"</string>
@@ -31,4 +31,6 @@
     <string name="next_guys">The rest is left as an exercise for the next guys</string>
     <string name="networkThroughput">Network throughput (units)</string>
     <string name="search_for_devices">Search for devices</string>
+    <string name="log_out">Log out</string>
+    <string name="network_error">Network error</string>
 </resources>

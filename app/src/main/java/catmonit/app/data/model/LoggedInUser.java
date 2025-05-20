@@ -5,21 +5,16 @@ package catmonit.app.data.model;
  */
 public class LoggedInUser {
 
-    private final String userId;
     private final String displayName;
     private final String JWT;
     private final String server;
 
-    public LoggedInUser(String userId, String displayName, String JWT, String server) {
-        this.userId = userId;
+    public LoggedInUser(String displayName, String JWT, String server) {
         this.displayName = displayName;
         this.JWT = JWT;
         this.server = server;
     }
 
-    public String getUserId() {
-        return userId;
-    }
 
     public String getDisplayName() {
         return displayName;

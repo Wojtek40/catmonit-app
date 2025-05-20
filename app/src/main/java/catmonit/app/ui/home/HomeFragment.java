@@ -1,5 +1,6 @@
 package catmonit.app.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import catmonit.app.R;
 import catmonit.app.databinding.FragmentHomeBinding;
+import catmonit.app.ui.login.LoginActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -27,6 +29,11 @@ public class HomeFragment extends Fragment {
 
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), mText -> textView.setText(getString(R.string.welcome, mText)));
+        binding.buttonLogout.setOnClickListener(view -> {
+            homeViewModel.logout(getContext());
+            startActivity(new Intent(getContext(), LoginActivity.class));
+            requireActivity().finish();
+        });
         return root;
     }
 

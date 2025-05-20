@@ -35,13 +35,13 @@ public class Result<T> {
 
     // Error sub-class
     public final static class Error extends Result {
-        private final Exception error;
+        private final Throwable error;
 
-        public Error(Exception error) {
+        public Error(Throwable error) {
             this.error = error;
         }
 
-        public Exception getError() {
+        public Throwable getError() {
             return this.error;
         }
     }

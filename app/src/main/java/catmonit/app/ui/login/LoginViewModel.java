@@ -1,13 +1,21 @@
 package catmonit.app.ui.login;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import catmonit.app.R;
+import catmonit.app.api_connection.APIClient;
+import catmonit.app.api_connection.ApiService;
+import catmonit.app.api_connection.models.LoginRequest;
+import catmonit.app.api_connection.models.LoginResponse;
 import catmonit.app.data.LoginRepository;
-import catmonit.app.data.Result;
 import catmonit.app.data.model.LoggedInUser;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginViewModel extends ViewModel {
 
@@ -28,16 +36,31 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String serverAddress, String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password, serverAddress);
+//        Result<LoggedInUser> result = loginRepository.login(username, passwords, serverAddress);
+//        if (result instanceof Result.Success){
+//            LoggedInUser user = ((Result.Success<LoggedInUser>) result).getData();
+//            loginResult.setValue(new LoginResult(new LoggedInUserView(user.getJWT())));
+//        }
+        Log.println(Log.DEBUG, "", serverAddress);
+        ApiService apiService = APIClient.getClient(serverAddress).create(ApiService.class);
 
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        apiService.login(new LoginRequest(username, password)).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    loginRepository.setLoggedInUser(new LoggedInUser(username, response.body().getToken(), serverAddress));
+                    loginResult.setValue(new LoginResult(new LoggedInUserView(response.body().getToken())));
+                } else {
+                    loginResult.setValue(new LoginResult(R.string.login_failed));
+                }
+            }
 
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable throwable) {
+                loginResult.setValue(new LoginResult(R.string.network_error));
+                Log.println(Log.ERROR, "netw", Log.getStackTraceString(throwable));
+            }
+        });
     }
 
     public void loginDataChanged(String serverAddress, String username, String password) {

@@ -14,7 +14,6 @@ public class LoginRepository {
     private static final String ACCESS_TOKEN_NAME = "access_token";
     private static final String PREFS_NAME = "auth_prefs";
     private static final String SERVER_NAME = "server_name";
-    private static final String USERID = "userid";
     private static final String DISPLAY_NAME = "display_name";
     private static volatile LoginRepository instance;
     private final LoginDataSource dataSource;
@@ -49,7 +48,7 @@ public class LoginRepository {
         if (accessToken == null) {
             return lr;
         }
-        lr.user = new LoggedInUser(prefs.getString(USERID, null), prefs.getString(DISPLAY_NAME, null), accessToken, prefs.getString(SERVER_NAME, null));
+        lr.user = new LoggedInUser(prefs.getString(DISPLAY_NAME, null), accessToken, prefs.getString(SERVER_NAME, null));
         instance = lr;
         return instance;
     }
@@ -68,19 +67,27 @@ public class LoginRepository {
         return user;
     }
 
-    private void setLoggedInUser(LoggedInUser user) {
+    public void setLoggedInUser(LoggedInUser user) {
         this.user = user;
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
 
     public Result<LoggedInUser> login(String username, String password, String server) {
-        // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password, server);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
-        }
-        return result;
+//        final Result<LoggedInUser>[] result = new Result[1];
+//        final ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.execute(() -> {
+//            try {
+//                result[0] = dataSource.login(username, password, server);
+//            } catch (Exception e) {
+//                result[0]
+//            }
+//        });
+//        if (result[0] instanceof Result.Success) {
+//            setLoggedInUser(((Result.Success<LoggedInUser>) result[0]).getData());
+//        }
+//        return result[0];
+        return null;
     }
 
     public void saveUserToSharedPrefereces(Context context) {
@@ -90,7 +97,6 @@ public class LoginRepository {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putString(ACCESS_TOKEN_NAME, user.getJWT())
                 .putString(DISPLAY_NAME, user.getDisplayName())
-                .putString(USERID, user.getUserId())
                 .putString(SERVER_NAME, user.getServer())
                 .apply();
     }

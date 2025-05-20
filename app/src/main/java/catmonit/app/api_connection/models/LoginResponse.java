@@ -4,9 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class LoginResponse {
     @SerializedName("token")
-    private String token;
+    private final String token;
 
     public String getToken() {
         return token;
+    }
+
+    public LoginResponse(String token) {
+        this.token = token;
     }
 }

@@ -1,7 +1,5 @@
 package catmonit.app.data;
 
-import java.io.IOException;
-
 import catmonit.app.data.model.LoggedInUser;
 
 /**
@@ -10,21 +8,24 @@ import catmonit.app.data.model.LoggedInUser;
 public class LoginDataSource {
 
     public Result<LoggedInUser> login(String username, String password, String server) {
-
-        try {
-            // TODO: handle loggedInUser authentication
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            username,
-                            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-                            server);
-            return new Result.Success<>(fakeUser);
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
-        }
+//        MutableLiveData<Result<LoggedInUser>> loggedIn = new MutableLiveData<>(null);
+//        ApiService authService = APIClient.getClient(server).create(ApiService.class);
+//        Response<LoginResponse> response;
+//        try {
+//            response = authService.login(new LoginRequest(username, password)).execute();
+//        } catch (
+//                IOException e) {
+//            return new Result.Error(e);
+//        }
+//        if (response.isSuccessful() && response.body() != null){
+//            LoggedInUser user = new LoggedInUser(username, response.body().getToken(), server);
+//            return new Result.Success<LoggedInUser>(user);
+//        }
+//        Gson gson = new Gson();
+//        ErrorResponse er = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class)
+//        return new Result.Error(new Exception())
+        return null;
     }
-
     public void logout() {
         // TODO: revoke authentication
     }
