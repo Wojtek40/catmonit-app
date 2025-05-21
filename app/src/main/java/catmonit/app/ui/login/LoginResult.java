@@ -10,6 +10,7 @@ class LoginResult {
     private LoggedInUserView success;
     @Nullable
     private Integer error;
+    private boolean newUserCreated = false;
 
     LoginResult(@Nullable Integer error) {
         this.error = error;
@@ -17,6 +18,11 @@ class LoginResult {
 
     LoginResult(@Nullable LoggedInUserView success) {
         this.success = success;
+    }
+
+    LoginResult(@Nullable LoggedInUserView success, boolean newUserCreated) {
+        this.success = success;
+        this.newUserCreated = newUserCreated;
     }
 
     @Nullable

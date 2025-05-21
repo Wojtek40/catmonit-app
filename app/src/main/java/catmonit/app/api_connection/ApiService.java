@@ -1,5 +1,7 @@
 package catmonit.app.api_connection;
 
+import catmonit.app.api_connection.models.CreateUserRequest;
+import catmonit.app.api_connection.models.GenericResponse;
 import catmonit.app.api_connection.models.LoginRequest;
 import catmonit.app.api_connection.models.LoginResponse;
 import retrofit2.Call;
@@ -13,4 +15,7 @@ public interface ApiService {
 
     @GET("api/Login/userCheck")
     Call<?> userCheck();
+
+    @POST("admin/createUser")
+    Call<GenericResponse> createUser(@Body CreateUserRequest createUserRequest);
 }

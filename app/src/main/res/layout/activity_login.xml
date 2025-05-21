@@ -22,7 +22,11 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:enabled="false"
+        android:text="api-web.local"
         app:layout_constraintTop_toTopOf="parent" />
+    <!-- CAUTION the ip address of the server is hardcoded in APIClient.java -->
+    <!--    Changing it here won't do anything -->
 
     <EditText
         android:id="@+id/username"

@@ -36,20 +36,14 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String serverAddress, String username, String password) {
-//        Result<LoggedInUser> result = loginRepository.login(username, passwords, serverAddress);
-//        if (result instanceof Result.Success){
-//            LoggedInUser user = ((Result.Success<LoggedInUser>) result).getData();
-//            loginResult.setValue(new LoginResult(new LoggedInUserView(user.getJWT())));
-//        }
-        Log.println(Log.DEBUG, "", serverAddress);
-        ApiService apiService = APIClient.getClient(serverAddress).create(ApiService.class);
-
+        final String url = APIClient.sanitizeBaseUrl(serverAddress);
+        ApiService apiService = APIClient.getClient(url).create(ApiService.class);
         apiService.login(new LoginRequest(username, password)).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    loginRepository.setLoggedInUser(new LoggedInUser(username, response.body().getToken(), serverAddress));
-                    loginResult.setValue(new LoginResult(new LoggedInUserView(response.body().getToken())));
+                    loginRepository.setLoggedInUser(new LoggedInUser(username, response.body().getToken(), url));
+                    loginResult.setValue(new LoginResult(new LoggedInUserView(username)));
                 } else {
                     loginResult.setValue(new LoginResult(R.string.login_failed));
                 }
@@ -58,7 +52,7 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable throwable) {
                 loginResult.setValue(new LoginResult(R.string.network_error));
-                Log.println(Log.ERROR, "netw", Log.getStackTraceString(throwable));
+                Log.println(Log.ERROR, "network (catmonit.app)", Log.getStackTraceString(throwable));
             }
         });
     }

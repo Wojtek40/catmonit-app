@@ -108,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+//        Snackbar.make(binding.login, errorString, Snackbar.LENGTH_LONG).show();
+
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
