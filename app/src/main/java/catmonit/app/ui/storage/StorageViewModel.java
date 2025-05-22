@@ -26,8 +26,10 @@ public class StorageViewModel extends ViewModel {
         Log.d("SVM", "StorageViewModel: initialised");
         webSocketManager = new WebSocketManager();
         webSocketManager.startListeningStorage();
+
         storageState = new MutableLiveData<>(new StorageState(new Warning[]{}, new Warning[]{}, new DeviceInfo[]{}));
-        rawData = webSocketManager.getMessageLiveData();
+        rawData = webSocketManager.getStorageLiveData();
+
         liveStateBuilder = new MediatorLiveData<>();
         liveStateBuilder.addSource(rawData, devicesWSResponse -> {
             Log.d("SVM", "StorageViewModel: ");

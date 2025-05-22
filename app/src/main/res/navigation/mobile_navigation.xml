@@ -16,6 +16,11 @@
         android:name="catmonit.app.ui.storage.StorageFragment"
         android:label="@string/title_storage"
         tools:layout="@layout/fragment_storage" />
+    <fragment
+        android:id="@+id/navigation_fileshares"
+        android:name="catmonit.app.ui.fileshares.FilesharesFragment"
+        android:label="@string/file_shares"
+        tools:layout="@layout/fragment_fileshares" />
 
     <fragment
         android:id="@+id/navigation_networking"

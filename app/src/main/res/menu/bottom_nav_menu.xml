@@ -12,6 +12,11 @@
         android:title="@string/title_storage" />
 
     <item
+        android:id="@+id/navigation_fileshares"
+        android:icon="@drawable/folder_shared_24px"
+        android:title="@string/file_shares" />
+
+    <item
         android:id="@+id/navigation_networking"
         android:icon="@drawable/hub_24px"
         android:title="@string/title_networking" />

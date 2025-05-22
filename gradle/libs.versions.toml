@@ -17,6 +17,7 @@ navigationUi = "2.9.0"
 annotation = "1.9.1"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
+legacySupportV4 = "1.0.0"
 
 [libraries]
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
@@ -35,6 +36,7 @@ annotation = { group = "androidx.annotation", name = "annotation", version.ref =
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
