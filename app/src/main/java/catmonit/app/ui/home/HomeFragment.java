@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import catmonit.app.R;
+import catmonit.app.data.LoginRepository;
 import catmonit.app.databinding.FragmentHomeBinding;
 import catmonit.app.ui.login.LoginActivity;
 
@@ -21,6 +22,10 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        if (!LoginRepository.getInstance().isLoggedIn()) {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            requireActivity().finish();
+        }
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 

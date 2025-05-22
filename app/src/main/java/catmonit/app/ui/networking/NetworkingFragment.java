@@ -1,5 +1,6 @@
 package catmonit.app.ui.networking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import catmonit.app.R;
+import catmonit.app.data.LoginRepository;
 import catmonit.app.databinding.FragmentNetworkingBinding;
+import catmonit.app.ui.login.LoginActivity;
 
 public class NetworkingFragment extends Fragment {
 
@@ -30,6 +33,10 @@ public class NetworkingFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        if (!LoginRepository.getInstance().isLoggedIn()) {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            requireActivity().finish();
+        }
         NetworkingViewModel networkingViewModel =
                 new ViewModelProvider(this).get(NetworkingViewModel.class);
 

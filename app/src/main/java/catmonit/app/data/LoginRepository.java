@@ -62,7 +62,11 @@ public class LoginRepository {
         if (user == null) return false;
         if (user.getJWT() == null) return false;
         DecodedJWT jwt = JWT.decode(user.getJWT());
-        return jwt.getExpiresAt().after(new Date());
+        if (jwt.getExpiresAt().before(new Date())) {
+            user = null;
+            return false;
+        }
+        return true;
     }
 
     public void logout(Context context) {

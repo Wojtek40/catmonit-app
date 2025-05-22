@@ -1,5 +1,6 @@
 package catmonit.app.ui.storage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import catmonit.app.R;
+import catmonit.app.data.LoginRepository;
 import catmonit.app.databinding.FragmentStorageBinding;
 import catmonit.app.models.DeviceInfoAdapter;
 import catmonit.app.models.Warning;
 import catmonit.app.models.WarningAdapter;
+import catmonit.app.ui.login.LoginActivity;
 
 
 public class StorageFragment extends Fragment {
@@ -26,6 +29,10 @@ public class StorageFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        if (!LoginRepository.getInstance().isLoggedIn()) {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            requireActivity().finish();
+        }
         StorageViewModel storageViewModel =
                 new ViewModelProvider(this).get(StorageViewModel.class);
 
