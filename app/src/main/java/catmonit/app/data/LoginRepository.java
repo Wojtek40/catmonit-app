@@ -3,6 +3,11 @@ package catmonit.app.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import java.util.Date;
+
 import catmonit.app.data.model.LoggedInUser;
 
 /**
@@ -54,7 +59,10 @@ public class LoginRepository {
     }
 
     public boolean isLoggedIn() {
-        return user != null;
+        if (user == null) return false;
+        if (user.getJWT() == null) return false;
+        DecodedJWT jwt = JWT.decode(user.getJWT());
+        return jwt.getExpiresAt().after(new Date());
     }
 
     public void logout(Context context) {
