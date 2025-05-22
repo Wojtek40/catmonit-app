@@ -40,7 +40,8 @@ public class StorageFragment extends Fragment {
         View root = binding.getRoot();
 
         storageViewModel.getStorageState().observe(getViewLifecycleOwner(), this::updateDisplay);
-
+        storageViewModel.getLiveStateBuilder().observe(getViewLifecycleOwner(), x -> {
+        });
         return root;
     }
 

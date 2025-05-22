@@ -1,9 +1,16 @@
 package catmonit.app.ui.storage;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
+
+import catmonit.app.api_connection.WebSocketManager;
+import catmonit.app.api_connection.models.storage.DevicesWSResponse;
 import catmonit.app.models.DeviceInfo;
 import catmonit.app.models.DiscInfo;
 import catmonit.app.models.Warning;
@@ -11,16 +18,33 @@ import catmonit.app.models.Warning;
 public class StorageViewModel extends ViewModel {
 
     private final MutableLiveData<StorageState> storageState;
+    private final LiveData<DevicesWSResponse> rawData;
+    private final MediatorLiveData<StorageState> liveStateBuilder;
+    private final WebSocketManager webSocketManager;
 
     public StorageViewModel() {
-        storageState = new MutableLiveData<>();
-        storageState.setValue(new StorageState(
-                new Warning[]{new Warning(Warning.WARNING, "0", "Ostrzeżenie", "Test device 0/1", "192.168.0.12")},
-                new Warning[]{new Warning(Warning.ERROR, "01", "Krytyczny błąd", "Drukarka", "192.168.0.113"),
-                        new Warning(Warning.ERROR, "01", "Krytyczny błąd", "Drukarka", "192.168.0.113")},
-                new DeviceInfo[]{new DeviceInfo("Sample device", "192.0.0.78", "", new DiscInfo[]{new DiscInfo("/dev/nvme1", 1024L, 3197798L)}, 1024L, 3197798L),
-                        new DeviceInfo("Sample device", "192.0.0.78", "", new DiscInfo[]{new DiscInfo("/dev/nvme1", 120000L, 3197798L), new DiscInfo("/dev/nvme1", 1200000L, 3197798L)}, 1320000L, 6395596L)}
-        ));
+        Log.d("SVM", "StorageViewModel: initialised");
+        webSocketManager = new WebSocketManager();
+        webSocketManager.startListeningStorage();
+        storageState = new MutableLiveData<>(new StorageState(new Warning[]{}, new Warning[]{}, new DeviceInfo[]{}));
+        rawData = webSocketManager.getMessageLiveData();
+        liveStateBuilder = new MediatorLiveData<>();
+        liveStateBuilder.addSource(rawData, devicesWSResponse -> {
+            Log.d("SVM", "StorageViewModel: ");
+            ArrayList<DeviceInfo> devices = new ArrayList<>();
+            devicesWSResponse.getAutoDevices().forEach((s, deviceWS) -> {
+                if (deviceWS == null || deviceWS.getDeviceInfo() == null) return;
+                devices.add(new DeviceInfo(deviceWS.getDeviceInfo().getHostname(),
+                        deviceWS.getDeviceInfo().getIpAddress(),
+                        deviceWS.getDeviceInfo().getOs(),
+                        deviceWS.getDiscInfo().stream().map(discInfoWS -> new DiscInfo(discInfoWS.getLabel(), discInfoWS.getUsedBytes(), discInfoWS.getTotalBytes())).toArray(DiscInfo[]::new)));
+            });
+            storageState.setValue(new StorageState(new Warning[]{}, new Warning[]{}, devices.toArray(new DeviceInfo[0])));
+        });
+    }
+
+    public LiveData<StorageState> getLiveStateBuilder() {
+        return liveStateBuilder;
     }
 
     public LiveData<StorageState> getStorageState() {

@@ -16,13 +16,7 @@ public class APIClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(String url) {
-        OkHttpClient client = new OkHttpClient.Builder().dns(new Dns() {
-            @NonNull
-            @Override
-            public List<InetAddress> lookup(@NonNull String s) throws UnknownHostException {
-                return List.of(InetAddress.getByAddress(new byte[]{(byte) 10, (byte) 10, (byte) 51, (byte) 3}));
-            }
-        }).build();
+        OkHttpClient client = getOkHttpClient().build();
 
         retrofit = new Retrofit.Builder()
                     .baseUrl(url)
@@ -30,6 +24,16 @@ public class APIClient {
                 .client(client)
                     .build();
         return retrofit;
+    }
+
+    public static OkHttpClient.Builder getOkHttpClient() {
+        return new OkHttpClient.Builder().dns(new Dns() {
+            @NonNull
+            @Override
+            public List<InetAddress> lookup(@NonNull String s) throws UnknownHostException {
+                return List.of(InetAddress.getByAddress(new byte[]{(byte) 10, (byte) 10, (byte) 51, (byte) 3}));
+            }
+        });
     }
 
     public static String sanitizeBaseUrl(String userInput) {

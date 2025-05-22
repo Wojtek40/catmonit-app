@@ -1,20 +1,27 @@
 package catmonit.app.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Arrays;
+
 public class DeviceInfo {
+    @SerializedName("hostname")
     protected String deviceName;
     protected String ipAddress;
-    protected String icon;
+    protected String os;
+    @SerializedName("DisksInfo")
     protected DiscInfo[] discInfo;
     protected long usedSpace;
     protected long totalSpace;
 
-    public DeviceInfo(String deviceName, String ipAddress, String icon, DiscInfo[] discInfo, long usedSpace, long totalSpace) {
+    public DeviceInfo(String deviceName, String ipAddress, String os, DiscInfo[] discInfo) {
         this.deviceName = deviceName;
         this.ipAddress = ipAddress;
-        this.icon = icon;
+        this.os = os;
         this.discInfo = discInfo;
-        this.usedSpace = usedSpace;
-        this.totalSpace = totalSpace;
+
+        this.usedSpace = Arrays.stream(discInfo).mapToLong(i -> i.usedBytes).sum();
+        this.totalSpace = Arrays.stream(discInfo).mapToLong(i -> i.totalBytes).sum();
     }
 
     public String getDeviceName() {
@@ -25,8 +32,8 @@ public class DeviceInfo {
         return ipAddress;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getOs() {
+        return os;
     }
 
     public DiscInfo[] getDiscInfo() {
