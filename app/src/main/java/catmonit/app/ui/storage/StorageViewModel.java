@@ -23,16 +23,14 @@ public class StorageViewModel extends ViewModel {
     private final WebSocketManager webSocketManager;
 
     public StorageViewModel() {
-        Log.d("SVM", "StorageViewModel: initialised");
         webSocketManager = new WebSocketManager();
         webSocketManager.startListeningStorage();
-
+        Log.w("StorageViewModel", "StorageViewModel: connected WS");
         storageState = new MutableLiveData<>(new StorageState(new Warning[]{}, new Warning[]{}, new DeviceInfo[]{}));
         rawData = webSocketManager.getStorageLiveData();
 
         liveStateBuilder = new MediatorLiveData<>();
         liveStateBuilder.addSource(rawData, devicesWSResponse -> {
-            Log.d("SVM", "StorageViewModel: ");
             ArrayList<DeviceInfo> devices = new ArrayList<>();
             devicesWSResponse.getAutoDevices().forEach((s, deviceWS) -> {
                 if (deviceWS == null || deviceWS.getDeviceInfo() == null) return;

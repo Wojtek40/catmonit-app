@@ -28,10 +28,15 @@
     <string name="icon">icon</string>
     <string name="error_icon">Error icon</string>
     <string name="warning_icon">Warning icon</string>
-    <string name="next_guys">The rest is left as an exercise for the next guys</string>
-    <string name="networkThroughput">Network throughput (units)</string>
+    <string name="next_guys">The data you see is all random. Implementing this is left as an exercise for the next guys.</string>
+    <string name="networkThroughput">Network throughput (kB/s)</string>
     <string name="search_for_devices">Search for devices</string>
     <string name="log_out">Log out</string>
     <string name="network_error">Network error</string>
     <string name="file_shares">File shares</string>
+    <string name="system">System</string>
+    <string name="uptime">%s uptime</string>
+    <string name="cpu_usage_d">CPU usage: %.2f %%</string>
+    <string name="ram_usage">RAM usage: %s / %s</string>
+    <string name="swap_usage">Swap usage: %s / %s</string>
 </resources>

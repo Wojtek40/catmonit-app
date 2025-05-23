@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
+import catmonit.app.api_connection.models.SystemWSResponse;
 import catmonit.app.api_connection.models.fileshares.FilesharesWSResponse;
 import catmonit.app.api_connection.models.storage.DevicesWSResponse;
 import catmonit.app.data.LoginRepository;
@@ -26,6 +27,8 @@ public class WebSocketManager extends WebSocketListener {
     private final MutableLiveData<FilesharesWSResponse> webSocketMessageFS = new MutableLiveData<>();
 
     private final MutableLiveData<DevicesWSResponse> webSocketMessage = new MutableLiveData<>();
+
+    private final MutableLiveData<SystemWSResponse> webSocketMessageSystem = new MutableLiveData<>();
     private final MutableLiveData<String> webSocketStatus = new MutableLiveData<>("Disconnected");
 
     public MutableLiveData<FilesharesWSResponse> getFilesharesLiveData() {
@@ -45,8 +48,13 @@ public class WebSocketManager extends WebSocketListener {
         return webSocketMessage;
     }
 
+    public LiveData<SystemWSResponse> getSystemLiveData() {
+        return webSocketMessageSystem;
+    }
+
 
     public void startListeningStorage() {
+        stopListening();
         String endpoint = "disks/";
         Log.d("WSM", "startListening: ");
         String serverUrl = loginRepository.getLoggedInUser().getServer();
@@ -77,7 +85,17 @@ public class WebSocketManager extends WebSocketListener {
 
     }
 
+    public void stopListening() {
+        if (webSocket != null) {
+            webSocket.close(1000, null);
+            webSocket = null;
+        }
+//        client.dispatcher().executorService().shutdown();
+        webSocketStatus.postValue("Disconnected");
+    }
+
     public void startListeningFileshares() {
+        stopListening();
         String endpoint = "shares/";
         Log.d("WSM", "startListening: ");
         String serverUrl = loginRepository.getLoggedInUser().getServer();
@@ -108,13 +126,66 @@ public class WebSocketManager extends WebSocketListener {
 
     }
 
-    public void stopListening() {
-        if (webSocket != null) {
-            webSocket.close(1000, null);
-            webSocket = null;
+    public void startListeningSystem() {
+        stopListening();
+        String endpoint = "system/";
+        Log.d("WSM", "startListening: ");
+        String serverUrl = loginRepository.getLoggedInUser().getServer();
+        String token = loginRepository.getLoggedInUser().getJWT();
+
+        if (serverUrl == null || token == null) {
+            Log.e("WebSocketManager", "Server URL or token is null");
+            return;
         }
-        client.dispatcher().executorService().shutdown();
-        webSocketStatus.postValue("Disconnected");
+
+        if (!serverUrl.startsWith("wss://")) {
+            if (serverUrl.startsWith("https://")) {
+                serverUrl = serverUrl.replaceFirst("https://", "wss://");
+            } else if (serverUrl.startsWith("http://")) {
+                serverUrl = serverUrl.replaceFirst("http://", "wss://");
+            } else if (serverUrl.startsWith("ws://")) {
+                serverUrl = serverUrl.replaceFirst("ws://", "wss://");
+            } else {
+                serverUrl = "wss://" + serverUrl;
+            }
+        }
+        Log.d("WSM", "startListening: " + serverUrl);
+        Request request = new Request.Builder()
+                .url(serverUrl + endpoint + "/?Authentication=" + token)
+                .build();
+        webSocket = client.newWebSocket(request, new SystemWebSocketListener());
+        webSocketStatus.postValue("Connecting");
+    }
+
+    private class SystemWebSocketListener extends WebSocketListener {
+        @Override
+        public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
+            webSocketStatus.postValue("Disconnected");
+        }
+
+        @Override
+        public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, @Nullable Response response) {
+            webSocketStatus.postValue("Disconnected");
+            String responseText = "";
+            if (response != null) {
+                responseText = response.message();
+            }
+            Log.e("WebSocketManager", "onFailure:  (in WSM System) " + responseText, t);
+        }
+
+        @Override
+        public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
+            SystemWSResponse systemWSResponse = gson.fromJson(text, SystemWSResponse.class);
+            Log.d("WebSocketManager", "onMessage System: " + text);
+            webSocketMessageSystem.postValue(systemWSResponse);
+        }
+
+        @Override
+        public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
+            webSocketStatus.postValue("Connected");
+            webSocket.send("{\"message\":\"start\", \"devices\":[],\"auto\":10}");
+            Log.d("WebSocketManager", "onOpen System: Connected");
+        }
     }
 
     private class StorageWebSocketListener extends WebSocketListener {
@@ -179,4 +250,6 @@ public class WebSocketManager extends WebSocketListener {
             webSocket.send("{\"message\":\"start\", \"devices\":[],\"auto\":10}");
         }
     }
+
+
 }
