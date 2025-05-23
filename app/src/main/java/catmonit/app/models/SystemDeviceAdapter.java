@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import catmonit.app.R;
@@ -58,6 +59,14 @@ public class SystemDeviceAdapter extends RecyclerView.Adapter<SystemDeviceAdapte
             holder.uptime.setText(holder.itemView.getContext().getString(R.string.uptime, uptime.toString()));
         } catch (Exception e) {
             Log.e("SystmDvcAdptr", "Error parsing / calculating dt", e);
+            try {
+                Instant boot = Instant.parse(si.getLastBootTimestamp());
+                Instant now = Instant.now();
+                Duration uptime = Duration.between(boot, now);
+                holder.uptime.setText(holder.itemView.getContext().getString(R.string.uptime, uptime.toString()));
+            } catch (Exception ex) {
+                Log.e("SystmDvcAdptr", "Error parsing / calculating dt", ex);
+            }
         }
 
     }
